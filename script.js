@@ -1,7 +1,8 @@
-// Feeds RSS públicos de portais esportivos brasileiros
+// Fontes de notícias
 const feeds = [
-    "https://globoesporte.globo.com/futebol/times/sao-paulo/feed.rss",
-    "https://rss.uol.com.br/feed/noticias.php?canal=4" // UOL Esportes
+    "https://lance.com.br/rss",
+    "https://www.gazetaesportiva.com/rss/",
+    "https://rss.uol.com.br/feed/noticias.php?canal=4"
 ];
 
 async function fetchRSS(url) {
