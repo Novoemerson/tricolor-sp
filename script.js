@@ -1,9 +1,7 @@
 // Feeds RSS públicos de portais esportivos brasileiros
 const feeds = [
     "https://globoesporte.globo.com/futebol/times/sao-paulo/feed.rss",
-    "https://rss.uol.com.br/feed/noticias.php?canal=4", // UOL Esportes
-    "https://esportes.r7.com/feed/",                    // R7 Esportes
-    "https://esportes.yahoo.com/news/rss/"              // Yahoo Esportes
+    "https://rss.uol.com.br/feed/noticias.php?canal=4" // UOL Esportes
 ];
 
 async function fetchRSS(url) {
@@ -14,7 +12,6 @@ async function fetchRSS(url) {
         if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
         const data = await response.json();
         if (!data.contents) throw new Error("Conteúdo vazio");
-        console.log("✅ Feed carregado com sucesso:", url);
         return data.contents;
     } catch (e) {
         console.error("❌ Erro ao carregar feed:", url, e.message);
