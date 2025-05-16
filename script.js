@@ -14,6 +14,7 @@ async function fetchRSS(url) {
         if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
         const data = await response.json();
         if (!data.contents) throw new Error("Conteúdo vazio");
+        console.log("✅ Feed carregado com sucesso:", url);
         return data.contents;
     } catch (e) {
         console.error("❌ Erro ao carregar feed:", url, e.message);
