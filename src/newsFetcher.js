@@ -1,23 +1,16 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-// Lista de fontes de notícias sobre o São Paulo FC
 const sources = [
     "https://www.lance.com.br/sao-paulo",
     "https://www.gazetaesportiva.com/tag/sao-paulo"
 ];
 
-// Função para buscar notícias de uma URL específica
 async function buscarNoticias(url) {
     try {
         console.log(`🔍 Tentando acessar: ${url}`);
 
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000); // Timeout de 5 segundos
-
-        const resposta = await axios.get(url, { signal: controller.signal });
-        clearTimeout(timeout);
-
+        const resposta = await axios.get(url);
         const $ = cheerio.load(resposta.data);
 
         console.log("🔍 HTML carregado de:", url);
@@ -25,7 +18,6 @@ async function buscarNoticias(url) {
 
         let noticias = [];
 
-        // Testando múltiplos seletores para encontrar os títulos corretamente
         $("h2, .headline-title, .news-title, article h1, .post-title, .entry-title, .title").each((index, elemento) => {
             const titulo = $(elemento).text().trim();
             let link = $(elemento).closest("a").attr("href");
@@ -35,12 +27,17 @@ async function buscarNoticias(url) {
                 link = new URL(link, url).href;
             }
 
-            if (titulo && titulo.length > 5) { // Evita títulos vazios ou genéricos
+            if (titulo && titulo.length > 5) { 
                 noticias.push({ titulo, link: link || url, fonte: url });
             }
         });
 
-        console.log("🔍 Notícias extraídas:", noticias);
+        console.log("🔍 Notícias encontradas:", noticias);
+        
+        if (noticias.length === 0) {
+            console.error(`❌ Nenhuma notícia encontrada em ${url}. Revise os seletores.`);
+        }
+
         return noticias.length > 0 ? noticias : [];
     } catch (erro) {
         console.error(`❌ Erro ao acessar ${url}:`, erro.message);
@@ -48,11 +45,9 @@ async function buscarNoticias(url) {
     }
 }
 
-// Função para buscar notícias de todas as fontes definidas
 async function obterNoticias() {
     const resultados = await Promise.all(sources.map(buscarNoticias));
-    return resultados.flat(); // Junta todas as notícias em um único array
+    return resultados.flat();
 }
 
-// Exportando função corretamente
 module.exports = { obterNoticias };
