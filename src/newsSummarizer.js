@@ -1,12 +1,9 @@
-// newsSummarizer.js - Resumo de notícias do São Paulo FC usando IA
+const axios = require("axios");
 
-const axios = require('axios');
-const { obterNoticias } = require('./newsFetcher');
-
-// Função para gerar resumo usando IA do Hugging Face
+// Função para gerar um resumo da notícia
 async function gerarResumo(texto) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000); // Limite de 8 segundos
+    const timeout = setTimeout(() => controller.abort(), 8000); // Timeout de 8 segundos
 
     try {
         const resposta = await axios.post(
@@ -21,30 +18,21 @@ async function gerarResumo(texto) {
         clearTimeout(timeout);
         return resposta.data[0]?.summary_text || "Resumo indisponível no momento.";
     } catch (erro) {
-        console.error("❌ Tempo limite excedido ou erro na API:", erro);
+        console.error("❌ Erro ao gerar resumo:", erro);
         return "Resumo indisponível no momento.";
     }
 }
 
-// Função para processar e resumir as notícias
-async function processarNoticias() {
+// Função para processar todas as notícias corretamente
+async function processarNoticias(obterNoticias) {
     try {
         const noticias = await obterNoticias();
+
+        if (!noticias || noticias.length === 0) {
+            return [];
+        }
+
         const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
-            const textoCompleto = `Título da notícia: ${noticia.titulo}. 
-            Esta notícia foi publicada na ${noticia.fonte}. 
-            Gere um resumo **somente com informações reais sobre o São Paulo FC** sem mencionar outros clubes ou torneios internacionais.`;
-
-            const resumo = await gerarResumo(textoCompleto);
-            return {
-                titulo: noticia.titulo,async function processarNoticias() {
-    try {
-        const noticias = await obterNoticias();
-        
-        // Limitando para apenas 3 notícias por requisição para evitar sobrecarga
-        const noticiasLimitadas = noticias.slice(0, 3);
-
-        const noticiasResumidas = await Promise.all(noticiasLimitadas.map(async (noticia) => {
             const textoCompleto = `Título: ${noticia.titulo}. 
             Fonte: ${noticia.fonte}. 
             Resuma essa notícia destacando os principais pontos sobre o São Paulo FC.`;
@@ -65,5 +53,4 @@ async function processarNoticias() {
     }
 }
 
-// Exportando função para ser usada na API
 module.exports = { processarNoticias };
