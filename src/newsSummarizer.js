@@ -11,7 +11,7 @@ async function gerarResumo(texto) {
             prompt: `Resuma a seguinte notícia de forma clara e objetiva:\n\n"${texto}"`,
             max_tokens: 150
         }, {
-            headers: { Authorization: `Bearer SEU_TOKEN_API` }
+            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }` }
         });
 
         return resposta.data.choices[0].text.trim();
