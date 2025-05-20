@@ -10,7 +10,7 @@ async function gerarResumo(texto) {
 
     try {
         const resposta = await axios.post(
-            "https://api-inference.huggingface.co/models/facebook/bart-large-cnn", // Alterando para um modelo mais confiável
+            "https://api-inference.huggingface.co/models/google/pegasus-xsum",
             { inputs: texto },
             { 
                 headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
@@ -31,14 +31,14 @@ async function processarNoticias() {
     try {
         const noticias = await obterNoticias();
         const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
-            const textoCompleto = `Título: ${noticia.titulo}. 
-            Fonte: ${noticia.fonte}. 
-            Resuma esta notícia destacando os pontos principais sobre o São Paulo FC.`;
+            const textoCompleto = `Título da notícia: ${noticia.titulo}. 
+            Esta notícia foi publicada na ${noticia.fonte}. 
+            Gere um resumo **somente com informações reais sobre o São Paulo FC** sem mencionar outros clubes ou torneios internacionais.`;
 
             const resumo = await gerarResumo(textoCompleto);
             return {
                 titulo: noticia.titulo,
-                resumo: resumo !== "Resumo indisponível no momento." ? resumo : "Erro ao gerar resumo. Verifique a fonte.",
+                resumo: resumo.includes("Liga dos Campeões") || resumo.includes("FC Barcelona") ? "Erro ao gerar resumo. Verifique a fonte." : resumo,
                 link: noticia.link,
                 fonte: noticia.fonte
             };
