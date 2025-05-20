@@ -31,7 +31,10 @@ async function processarNoticias() {
     try {
         const noticias = await obterNoticias();
         const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
-            const textoCompleto = `Título: ${noticia.titulo}. O que aconteceu: ${noticia.titulo} é uma notícia sobre o São Paulo FC publicada na ${noticia.fonte}. Resuma esta notícia corretamente, focando apenas no clube São Paulo FC e evitando informações genéricas.`;
+            const textoCompleto = `Título: ${noticia.titulo}. 
+            Fonte: ${noticia.fonte}. 
+            Conteúdo Original: "${noticia.titulo}". 
+            Gere um resumo claro e objetivo baseado no contexto.`;
 
             const resumo = await gerarResumo(textoCompleto);
             return {
