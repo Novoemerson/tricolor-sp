@@ -1,38 +1,32 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
+const puppeteer = require("puppeteer");
 
-// Fonte de notícias sem Puppeteer
 const sources = [
     { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "article.noticia h3" }
 ];
 
-// Função para capturar notícias
+// Função para capturar notícias corretamente via Puppeteer
 async function buscarNoticias(source) {
     const { url, selector } = source;
 
     try {
-        console.log(`🔍 Acessando: ${url} via Axios`);
+        console.log(`🔍 Acessando: ${url} via Puppeteer`);
 
-        const resposta = await axios.get(url);
-        const $ = cheerio.load(resposta.data);
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
 
-        let noticias = [];
+        await page.goto(url, { waitUntil: "networkidle2" });
 
-        // Extraindo títulos e links das notícias corretamente
-        $(selector).each((index, elemento) => {
-            const titulo = $(elemento).text().trim();
-            let link = $(elemento).closest("a").attr("href");
+        // Captura os títulos e links das notícias corretamente
+        const noticias = await page.evaluate((selector) => {
+            return Array.from(document.querySelectorAll(selector)).map(el => ({
+                titulo: el.innerText.trim(),
+                link: el.closest("a") ? el.closest("a").href : null
+            })).filter(noticia => noticia.titulo.length > 5);
+        }, selector);
 
-            if (link && !link.startsWith("http")) {
-                link = new URL(link, url).href;
-            }
+        await browser.close();
 
-            if (titulo.length > 5) {
-                noticias.push({ titulo, link: link || url, fonte: url });
-            }
-        });
-
-        console.log("🔍 Notícias extraídas:", noticias);
+        console.log("🔍 Notícias encontradas:", noticias);
         return noticias.length > 0 ? noticias : [];
     } catch (erro) {
         console.error(`❌ Erro ao acessar ${url}:`, erro.message);
@@ -40,7 +34,7 @@ async function buscarNoticias(source) {
     }
 }
 
-// Captura notícias da Gazeta Esportiva
+// Função para capturar notícias corretamente
 async function obterNoticias() {
     const resultados = await Promise.all(sources.map(buscarNoticias));
     return resultados.flat();
