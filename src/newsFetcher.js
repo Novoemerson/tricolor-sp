@@ -12,9 +12,10 @@ async function buscarNoticias(source) {
         console.log(`🔍 Acessando: ${url} via Puppeteer`);
 
         const browser = await puppeteer.launch({
-            headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
-        });
+    headless: true,
+    executablePath: "/opt/render/.cache/puppeteer/chrome/linux-136.0.7103.94/chrome-linux64/chrome",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+});
         const page = await browser.newPage();
 
         // Simula um navegador real para evitar bloqueios do site
