@@ -4,15 +4,19 @@ const express = require("express");
 const { processarNoticias } = require("./newsSummarizer");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;  // Atualizando para a porta correta
 
-// Endpoint para testar manualmente `processarNoticias()`
+// Endpoint de teste
+app.get("/", (req, res) => {
+    res.send("<h1>🚀 Tricolor-SP está rodando! 🔥</h1><p>Acesse <a href='/api/noticias'>/api/noticias</a> para ver as últimas notícias.</p>");
+});
+
+// Endpoint de notícias
 app.get("/api/noticias", async (req, res) => {
     try {
         console.log("🔍 Testando processamento de notícias...");
         const noticias = await processarNoticias();
         console.log("✅ Notícias processadas:", noticias);
-
         res.json(noticias);
     } catch (erro) {
         console.error("❌ Erro ao processar notícias:", erro);
@@ -20,11 +24,7 @@ app.get("/api/noticias", async (req, res) => {
     }
 });
 
-// Iniciando o servidor
-// Rota principal - Página inicial
-app.get("/", (req, res) => {
-    res.send("<h1>🚀 Tricolor-SP está rodando! 🔥</h1><p>Acesse <a href='/api/noticias'>/api/noticias</a> para ver as últimas notícias.</p>");
-});
+// Iniciando o servidor na porta correta
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
