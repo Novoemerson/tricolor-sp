@@ -10,7 +10,7 @@ async function gerarResumo(texto) {
 
     try {
         const resposta = await axios.post(
-            "https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6",
+            "https://api-inference.huggingface.co/models/google/pegasus-xsum",
             { inputs: texto },
             { 
                 headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
@@ -18,7 +18,7 @@ async function gerarResumo(texto) {
             }
         );
 
-        clearTimeout(timeout); // Cancela timeout se a resposta chegar rápido
+        clearTimeout(timeout);
         return resposta.data[0]?.summary_text || "Resumo indisponível no momento.";
     } catch (erro) {
         console.error("❌ Tempo limite excedido ou erro na API:", erro);
@@ -31,7 +31,7 @@ async function processarNoticias() {
     try {
         const noticias = await obterNoticias();
         const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
-            const textoCompleto = `Título da notícia: ${noticia.titulo}. Fonte: ${noticia.fonte}. Link: ${noticia.link}. Resuma esta notícia apenas com informações do São Paulo FC.`;
+            const textoCompleto = `Título: ${noticia.titulo}. O que aconteceu: ${noticia.titulo} é uma notícia sobre o São Paulo FC publicada na ${noticia.fonte}. Resuma esta notícia corretamente, focando apenas no clube São Paulo FC e evitando informações genéricas.`;
 
             const resumo = await gerarResumo(textoCompleto);
             return {
