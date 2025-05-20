@@ -1,5 +1,9 @@
 const puppeteer = require("puppeteer");
-console.log("🔍 HTML carregado:", await page.content());
+
+const html = await page.content();
+console.log("🔍 HTML carregado!");
+require("fs").writeFileSync("log.html", html); // Salva o HTML em um arquivo para debug
+
 const sources = [
     { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "article.noticia a[href]" }
 ];
