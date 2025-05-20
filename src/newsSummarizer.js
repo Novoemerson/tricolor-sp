@@ -3,14 +3,23 @@
 const axios = require('axios');
 const { obterNoticias } = require('./newsFetcher');
 
-curl -X POST https://api.openai.com/v1/completions \
-  -H "Authorization: Bearer SEU_TOKEN_API" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "gpt-4",
-    "prompt": "Resuma esta notícia: São Paulo vence clássico e sobe na tabela!",
-    "max_tokens": 50
-  }'
+// Função para gerar resumo usando IA
+async function gerarResumo(texto) {
+    try {
+        const resposta = await axios.post("https://api.openai.com/v1/completions", {
+            model: "gpt-4",
+            prompt: `Resuma a seguinte notícia de forma clara e objetiva:\n\n"${texto}"`,
+            max_tokens: 150
+        }, {
+            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }
+        });
+
+        return resposta.data.choices[0].text.trim();
+    } catch (erro) {
+        console.error("Erro ao gerar resumo:", erro);
+        return "Resumo indisponível no momento.";
+    }
+}
 
 // Função para processar e resumir as notícias
 async function processarNoticias() {
