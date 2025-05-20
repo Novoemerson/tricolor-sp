@@ -33,16 +33,15 @@ async function gerarResumo(texto) {
 async function processarNoticias() {
     try {
         const noticias = await obterNoticias();
+        const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
+            const textoCompleto = `${noticia.titulo}. Fonte: ${noticia.fonte}. Link: ${noticia.link}`;
 
-        const noticiasResumidas = await Promise.all(noticias.slice(0, 5).map(async (noticia) => {
-            const resumo = await gerarResumo(noticia.titulo);
+            const resumo = await gerarResumo(textoCompleto);
             return {
                 titulo: noticia.titulo,
                 resumo: resumo,
                 link: noticia.link,
-                fonte: noticia.link.includes("lance") ? "Lance!" : 
-                       noticia.link.includes("gazetaesportiva") ? "Gazeta Esportiva" :
-                       noticia.link.includes("uol") ? "UOL Esporte" : "Fonte desconhecida"
+                fonte: noticia.fonte
             };
         }));
 
