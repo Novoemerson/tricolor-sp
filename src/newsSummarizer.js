@@ -37,8 +37,22 @@ async function processarNoticias() {
 
             const resumo = await gerarResumo(textoCompleto);
             return {
+                titulo: noticia.titulo,async function processarNoticias() {
+    try {
+        const noticias = await obterNoticias();
+        
+        // Limitando para apenas 3 notícias por requisição para evitar sobrecarga
+        const noticiasLimitadas = noticias.slice(0, 3);
+
+        const noticiasResumidas = await Promise.all(noticiasLimitadas.map(async (noticia) => {
+            const textoCompleto = `Título: ${noticia.titulo}. 
+            Fonte: ${noticia.fonte}. 
+            Resuma essa notícia destacando os principais pontos sobre o São Paulo FC.`;
+
+            const resumo = await gerarResumo(textoCompleto);
+            return {
                 titulo: noticia.titulo,
-                resumo: resumo.includes("Liga dos Campeões") || resumo.includes("FC Barcelona") ? "Erro ao gerar resumo. Verifique a fonte." : resumo,
+                resumo: resumo,
                 link: noticia.link,
                 fonte: noticia.fonte
             };
