@@ -6,13 +6,19 @@ const { obterNoticias } = require('./newsFetcher');
 // Função para gerar resumo usando IA
 async function gerarResumo(texto) {
     try {
-        const resposta = await axios.post("https://api.openai.com/v1/completions", {
-            model: "gpt-4",
-            prompt: `Resuma a seguinte notícia de forma clara e objetiva:\n\n"${texto}"`,
-            max_tokens: 150
-        }, {
-            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }
+        const resposta = await fetch("https://api-inference.huggingface.co/models/facebook/bart-large-cnn", {
+            method: "POST",
+            headers: { Authorization: "Bearer HUGGINGFACE_API_KEY", "Content-Type": "application/json" },
+            body: JSON.stringify({ inputs: texto })
         });
+
+        const dados = await resposta.json();
+        return dados[0]?.summary_text || "Resumo indisponível no momento.";
+    } catch (erro) {
+        console.error("Erro ao gerar resumo:", erro);
+        return "Resumo indisponível no momento.";
+    }
+}
 
         return resposta.data.choices[0].text.trim();
     } catch (erro) {
