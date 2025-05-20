@@ -30,11 +30,10 @@ async function gerarResumo(texto) {
 async function processarNoticias() {
     try {
         const noticias = await obterNoticias();
-        const noticiasResumidas = [];
 
-        for (const noticia of noticias.slice(0, 5)) {
+        const noticiasResumidas = await Promise.all(noticias.slice(0, 5).map(async (noticia) => {
             const resumo = await gerarResumo(noticia.titulo);
-            noticiasResumidas.push({
+            return {
                 titulo: noticia.titulo,
                 resumo: resumo,
                 link: noticia.link,
@@ -42,8 +41,8 @@ async function processarNoticias() {
                        noticia.link.includes("gazetaesportiva") ? "Gazeta Esportiva" :
                        noticia.link.includes("uol") ? "UOL Esporte" :
                        noticia.link.includes("globo") ? "Globo Esporte" : "Fonte desconhecida"
-            });
-        }
+            };
+        }));
 
         return noticiasResumidas;
     } catch (erro) {
