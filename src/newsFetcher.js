@@ -21,7 +21,9 @@ async function buscarNoticias(url) {
         clearTimeout(timeout);
         
         const $ = cheerio.load(resposta.data);
-        console.log("🔍 HTML carregado de:", url); // Adicionando log de depuração
+        console.log("🔍 HTML carregado de:", url);
+        console.log($.html().substring(0, 500)); // Mostra parte do código da página
+
         return resposta.data;
     } catch (erro) {
         console.error(`❌ Erro ao acessar ${url}:`, erro.message);
