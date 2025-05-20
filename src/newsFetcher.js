@@ -3,7 +3,6 @@ const puppeteer = require("puppeteer");
 const sources = [
     { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: ".news-item h3" } // Teste um seletor alternativo
 ];
-console.log("🔍 HTML da página carregado:", await page.content());
 
 // Função para capturar notícias corretamente via Puppeteer
 async function buscarNoticias(source) {
@@ -12,12 +11,19 @@ async function buscarNoticias(source) {
     try {
         console.log(`🔍 Acessando: ${url} via Puppeteer`);
 
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"]
+        });
         const page = await browser.newPage();
 
-        await page.goto(url, { waitUntil: "networkidle2" });
+        // Simula um navegador real para evitar bloqueios do site
+        await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+        await page.goto(url, { waitUntil: "domcontentloaded" });
 
         // Captura os títulos e links das notícias corretamente
+        console.log("🔍 HTML da página carregado:", await page.content()); // Debug para ver o HTML no Render
+
         const noticias = await page.evaluate((selector) => {
             return Array.from(document.querySelectorAll(selector)).map(el => ({
                 titulo: el.innerText.trim(),
