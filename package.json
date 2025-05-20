@@ -10,7 +10,7 @@
     "cors": "^2.8.5"
   },
   "scripts": {
-    "start": "node src/newsAPI.js"
-    "postinstall": "npx puppeteer browsers install chrome"
-  }
+  "start": "node src/newsAPI.js",
+  "postinstall": "npx puppeteer browsers install chrome"
+}
 }
