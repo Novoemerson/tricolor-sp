@@ -12,28 +12,21 @@ const sources = [
 ];
 
 // Função para buscar e processar notícias
-async function obterNoticias() {
-    const noticias = [];
+const axios = require('axios');
 
-    for (const url of sources) {
-        try {
-            const { data } = await axios.get(url);
-            const $ = cheerio.load(data);
+async function buscarNoticias(url) {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000); // Timeout de 5 segundos
 
-            // Exemplo: Procurar títulos de matérias e links
-            $("h2, h3").each((index, element) => {
-                noticias.push({
-                    titulo: $(element).text().trim(),
-                    link: $(element).parent().attr("href") || url
-                });
-            });
-
-        } catch (erro) {
-            console.error(`Erro ao acessar ${url}:`, erro.message);
-        }
+        const resposta = await axios.get(url, { signal: controller.signal });
+        
+        clearTimeout(timeout); // Cancela timeout se a resposta for rápida
+        return resposta.data;
+    } catch (erro) {
+        console.error(`❌ Erro ao acessar ${url}:`, erro.message);
+        return null; // Evita travamento
     }
-
-    return noticias;
 }
 
 // Exportando função
