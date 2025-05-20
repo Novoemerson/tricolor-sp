@@ -1,5 +1,3 @@
-// newsFetcher.js - Buscar notícias esportivas sobre o São Paulo FC
-
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -14,22 +12,36 @@ const sources = [
 async function buscarNoticias(url) {
     try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000);
+        const timeout = setTimeout(() => controller.abort(), 5000); // Timeout de 5 segundos
 
         const resposta = await axios.get(url, { signal: controller.signal });
 
         clearTimeout(timeout);
-        
+
         const $ = cheerio.load(resposta.data);
         console.log("🔍 HTML carregado de:", url);
-        console.log($.html().substring(0, 500)); // Mostra parte do código da página para verificação
+        console.log($.html().substring(0, 500)); // Mostra parte do código da página para depuração
 
-        return resposta.data;
+        // Testando diferentes seletores de títulos
+        let titulo = $("h2").first().text().trim();
+        if (!titulo) titulo = $(".headline-title").first().text().trim();
+        if (!titulo) titulo = $(".news-title").first().text().trim();
+        if (!titulo) titulo = $("article h1").first().text().trim();
+
+        console.log("🔍 Título encontrado:", titulo);
+
+        return titulo ? { titulo, link: url } : null;
     } catch (erro) {
         console.error(`❌ Erro ao acessar ${url}:`, erro.message);
-        return null;
+        return null; // Evita travamento
     }
 }
 
-// Exportando função
-module.exports = { buscarNoticias };
+// Função para processar todas as fontes de notícias
+async function obterNoticias() {
+    const resultados = await Promise.all(sources.map(buscarNoticias));
+    return resultados.filter(noticia => noticia !== null); // Remove valores nulos
+}
+
+// Exportando função corretamente
+module.exports = { obterNoticias };
