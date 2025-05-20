@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 
 const sources = [
-    { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "article.noticia h3" }
+    { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: ".news-item h3" } // Teste um seletor alternativo
 ];
 console.log("🔍 HTML da página carregado:", await page.content());
 
