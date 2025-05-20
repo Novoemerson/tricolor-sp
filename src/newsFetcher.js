@@ -2,8 +2,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 const sources = [
-    "https://www.lance.com.br/sao-paulo",
-    "https://www.gazetaesportiva.com/tag/sao-paulo"
+    { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "h2" }
 ];
 
 async function buscarNoticias(url) {
