@@ -39,8 +39,7 @@ async function processarNoticias() {
                 link: noticia.link,
                 fonte: noticia.link.includes("lance") ? "Lance!" : 
                        noticia.link.includes("gazetaesportiva") ? "Gazeta Esportiva" :
-                       noticia.link.includes("uol") ? "UOL Esporte" :
-                       noticia.link.includes("globo") ? "Globo Esporte" : "Fonte desconhecida"
+                       noticia.link.includes("uol") ? "UOL Esporte" : "Fonte desconhecida"
             };
         }));
 
