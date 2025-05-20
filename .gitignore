@@ -1,0 +1,7 @@
+# Arquivos e pastas que não devem ser versionados
+
+node_modules/   # Dependências do Node.js
+.env            # Arquivo de variáveis de ambiente (senhas, tokens)
+*.log           # Arquivos de log do sistema
+tricolor-sp.db  # Banco de dados SQLite
+.DS_Store       # Arquivos do macOS que não são necessários
