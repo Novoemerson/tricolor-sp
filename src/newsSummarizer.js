@@ -26,7 +26,7 @@ async function processarNoticias() {
     const noticias = await obterNoticias();
     const noticiasResumidas = [];
 
-    for (const noticia of noticias.slice(0, 5)) { // Limitando a 5 notícias por vez
+    for (const noticia of noticias.slice(0, 5)) {
         const resumo = await gerarResumo(noticia.titulo);
         noticiasResumidas.push({
             titulo: noticia.titulo,
@@ -42,4 +42,25 @@ async function processarNoticias() {
     return noticiasResumidas;
 }
 
-testarIA()
+// Teste manual da IA - Esta função foi declarada ANTES de ser chamada
+async function testarIA() {
+    try {
+        const resposta = await axios.post("https://api.openai.com/v1/completions", {
+            model: "gpt-4",
+            prompt: "Resuma esta notícia: 'São Paulo vence clássico e sobe na tabela!'",
+            max_tokens: 50
+        }, {
+            headers: { Authorization: `Bearer SEU_TOKEN_API` }
+        });
+
+        console.log("✅ Resumo gerado:", resposta.data.choices[0].text.trim());
+    } catch (erro) {
+        console.error("❌ Erro ao testar IA:", erro);
+    }
+}
+
+// Chamada de teste da função
+testarIA();
+
+// Exportando funções para uso na API
+module.exports = { processarNoticias };
