@@ -10,8 +10,8 @@ async function gerarResumo(texto) {
 
     try {
         const resposta = await axios.post(
-            "https://api-inference.huggingface.co/models/google/pegasus-xsum",
-            { inputs: texto }, // Agora sem comandos extras
+            "https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6",
+            { inputs: texto }, // Enviando apenas o texto limpo
             { 
                 headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
                 signal: controller.signal 
