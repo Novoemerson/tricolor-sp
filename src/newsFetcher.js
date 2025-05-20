@@ -11,8 +11,6 @@ const sources = [
 ];
 
 // Função para buscar e processar notícias
-const axios = require('axios');
-
 async function buscarNoticias(url) {
     try {
         const controller = new AbortController();
