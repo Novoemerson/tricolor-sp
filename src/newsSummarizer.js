@@ -5,17 +5,23 @@ const { obterNoticias } = require('./newsFetcher');
 
 // Função para gerar resumo usando IA do Hugging Face
 async function gerarResumo(texto) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // Limite de 10 segundos
+
     try {
         const resposta = await axios.post(
             "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
             { inputs: texto },
-            { headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` } }
+            { 
+                headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
+                signal: controller.signal 
+            }
         );
 
-        // Retorna o resumo gerado pela IA
+        clearTimeout(timeout); // Cancela timeout se a resposta chegar rápido
         return resposta.data[0]?.summary_text || "Resumo indisponível no momento.";
     } catch (erro) {
-        console.error("❌ Erro ao gerar resumo:", erro);
+        console.error("❌ Tempo limite excedido ou erro na API:", erro);
         return "Resumo indisponível no momento.";
     }
 }
