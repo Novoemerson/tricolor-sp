@@ -33,13 +33,12 @@ async function processarNoticias() {
         const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
             const textoCompleto = `Título: ${noticia.titulo}. 
             Fonte: ${noticia.fonte}. 
-            Conteúdo Original: "${noticia.titulo}". 
-            Gere um resumo claro e objetivo baseado no contexto.`;
+            Resuma esta notícia destacando os pontos principais sobre o São Paulo FC.`;
 
             const resumo = await gerarResumo(textoCompleto);
             return {
                 titulo: noticia.titulo,
-                resumo: resumo,
+                resumo: resumo !== "Resumo indisponível no momento." ? resumo : "Erro ao gerar resumo. Verifique a fonte.",
                 link: noticia.link,
                 fonte: noticia.fonte
             };
