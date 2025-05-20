@@ -22,7 +22,7 @@ async function buscarNoticias(url) {
         
         const $ = cheerio.load(resposta.data);
         console.log("🔍 HTML carregado de:", url);
-        console.log($.html().substring(0, 500)); // Mostra parte do código da página
+        console.log($.html().substring(0, 500)); // Mostra parte do código da página para verificação
 
         return resposta.data;
     } catch (erro) {
