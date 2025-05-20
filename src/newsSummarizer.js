@@ -10,8 +10,8 @@ async function gerarResumo(texto) {
 
     try {
         const resposta = await axios.post(
-            "https://api-inference.huggingface.co/models/t5-small",
-            { inputs: `Resuma o seguinte texto: ${texto}` },
+            "https://api-inference.huggingface.co/models/facebook/bart-large-cnn", // Alterando para um modelo mais confiável
+            { inputs: texto },
             { 
                 headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
                 signal: controller.signal 
