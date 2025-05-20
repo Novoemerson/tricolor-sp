@@ -1,56 +1,28 @@
-const axios = require("axios");
+const { obterNoticias } = require("./newsFetcher"); // Correção na importação
+const express = require("express");
+const app = express();
+const PORT = 10000;
 
-// Função para gerar um resumo da notícia
-async function gerarResumo(texto) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000); // Timeout de 8 segundos
-
+// Função para processar as notícias e gerar uma resposta JSON
+async function processarNoticias(req, res) {
     try {
-        const resposta = await axios.post(
-            "https://api-inference.huggingface.co/models/google/pegasus-xsum",
-            { inputs: texto },
-            { 
-                headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
-                signal: controller.signal 
-            }
-        );
-
-        clearTimeout(timeout);
-        return resposta.data[0]?.summary_text || "Resumo indisponível no momento.";
-    } catch (erro) {
-        console.error("❌ Erro ao gerar resumo:", erro);
-        return "Resumo indisponível no momento.";
-    }
-}
-
-// Função para processar todas as notícias corretamente
-async function processarNoticias(obterNoticias) {
-    try {
+        console.log("🔍 Processando notícias...");
         const noticias = await obterNoticias();
 
-        if (!noticias || noticias.length === 0) {
-            return [];
+        if (noticias.length === 0) {
+            throw new Error("Nenhuma notícia encontrada.");
         }
 
-        const noticiasResumidas = await Promise.all(noticias.map(async (noticia) => {
-            const textoCompleto = `Título: ${noticia.titulo}. 
-            Fonte: ${noticia.fonte}. 
-            Resuma essa notícia destacando os principais pontos sobre o São Paulo FC.`;
-
-            const resumo = await gerarResumo(textoCompleto);
-            return {
-                titulo: noticia.titulo,
-                resumo: resumo,
-                link: noticia.link,
-                fonte: noticia.fonte
-            };
-        }));
-
-        return noticiasResumidas;
+        res.json({ noticias });
     } catch (erro) {
-        console.error("❌ Erro ao processar notícias:", erro);
-        return [];
+        console.error("❌ Erro ao processar notícias:", erro.message);
+        res.status(500).json({ erro: erro.message });
     }
 }
 
-module.exports = { processarNoticias };
+// Rota para buscar as notícias
+app.get("/api/noticias", processarNoticias);
+
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
