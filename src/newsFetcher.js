@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-
+console.log("🔍 HTML carregado:", await page.content());
 const sources = [
     { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "article.noticia a" }
 ];
