@@ -11,7 +11,10 @@ async function gerarResumo(texto) {
     try {
         const resposta = await axios.post(
             "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
-            { inputs: `Resuma a seguinte notícia de forma clara e objetiva:\n\n"${texto}"`, parameters: { max_length: 50 } }, // Melhorando prompt
+            { 
+                inputs: `Aqui está uma notícia: "${texto}". Agora, gere um resumo curto e claro sobre ela:`, 
+                parameters: { max_length: 40, do_sample: false } // Reduzindo o tamanho e removendo amostragem para maior precisão
+            },
             { 
                 headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
                 signal: controller.signal 
