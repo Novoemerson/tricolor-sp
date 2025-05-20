@@ -11,29 +11,19 @@ const sources = [
 // Função para buscar e processar notícias
 async function buscarNoticias(url) {
     try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000); // Timeout de 5 segundos
-
-        const resposta = await axios.get(url, { signal: controller.signal });
-
-        clearTimeout(timeout);
-
+        const resposta = await axios.get(url);
         const $ = cheerio.load(resposta.data);
+        
         console.log("🔍 HTML carregado de:", url);
-        console.log($.html().substring(0, 500)); // Mostra parte do código da página para depuração
-
-        // Testando diferentes seletores de títulos
-        let titulo = $("h2").first().text().trim();
-        if (!titulo) titulo = $(".headline-title").first().text().trim();
-        if (!titulo) titulo = $(".news-title").first().text().trim();
-        if (!titulo) titulo = $("article h1").first().text().trim();
-
+        console.log($.html().substring(0, 500)); // Exibe um trecho do código da página
+        
+        const titulo = $("h2, .headline-title").first().text().trim();
         console.log("🔍 Título encontrado:", titulo);
 
         return titulo ? { titulo, link: url } : null;
     } catch (erro) {
         console.error(`❌ Erro ao acessar ${url}:`, erro.message);
-        return null; // Evita travamento
+        return null;
     }
 }
 
