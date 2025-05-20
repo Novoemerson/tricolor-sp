@@ -22,7 +22,13 @@ async function buscarNoticias(source) {
         await page.goto(url, { waitUntil: "domcontentloaded" });
 
         // Captura os títulos e links das notícias corretamente
-        console.log("🔍 HTML da página carregado:", await page.content()); // Debug para ver o HTML no Render
+       const html = await page.content();
+require("fs").writeFileSync("log.html", html);
+        
+        // Salva o HTML em um arquivo
+console.log("🔍 HTML da página carregado.");
+        
+        // Debug para ver o HTML no Render
 
         const noticias = await page.evaluate((selector) => {
             return Array.from(document.querySelectorAll(selector)).map(el => ({
