@@ -6,13 +6,16 @@ const { processarNoticias } = require("./newsSummarizer");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Endpoint para obter as notícias resumidas
+// Endpoint para testar manualmente `processarNoticias()`
 app.get("/api/noticias", async (req, res) => {
     try {
+        console.log("🔍 Testando processamento de notícias...");
         const noticias = await processarNoticias();
+        console.log("✅ Notícias processadas:", noticias);
+
         res.json(noticias);
     } catch (erro) {
-        console.error("Erro ao processar notícias:", erro);
+        console.error("❌ Erro ao processar notícias:", erro);
         res.status(500).json({ erro: "Não foi possível carregar as notícias." });
     }
 });
