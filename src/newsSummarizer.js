@@ -12,8 +12,8 @@ async function gerarResumo(texto) {
         const resposta = await axios.post(
             "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
             { 
-                inputs: `Leia o seguinte trecho de uma notícia e gere um resumo claro e objetivo:\n\n"${texto}"`, 
-                parameters: { max_length: 50, do_sample: false } // Melhorando a estrutura para resumos mais precisos
+                inputs: texto, // Enviando apenas o texto da notícia
+                parameters: { max_length: 50, do_sample: false }
             },
             { 
                 headers: { Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}` },
@@ -24,7 +24,7 @@ async function gerarResumo(texto) {
         clearTimeout(timeout); // Cancela timeout se a resposta chegar rápido
         return resposta.data[0]?.summary_text || "Resumo indisponível no momento.";
     } catch (erro) {
-        console.error("❌ Tempo limite excedido ou erro na API:", erro);
+        console.error("❌ Erro ao gerar resumo:", erro);
         return "Resumo indisponível no momento.";
     }
 }
