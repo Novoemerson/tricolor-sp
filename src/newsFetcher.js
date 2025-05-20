@@ -27,4 +27,4 @@ async function buscarNoticias(url) {
 }
 
 // Exportando função
-module.exports = { obterNoticias };
+module.exports = { buscarNoticias };
