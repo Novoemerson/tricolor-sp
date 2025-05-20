@@ -11,9 +11,8 @@ async function buscarNoticias(source) {
     try {
         console.log(`🔍 Acessando: ${url} via Puppeteer`);
 
-        const browser = await puppeteer.launch({
+       const browser = await puppeteer.launch({
     headless: true,
-    executablePath: "/opt/render/.cache/puppeteer/chrome/linux-136.0.7103.94/chrome-linux64/chrome",
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
 });
         const page = await browser.newPage();
