@@ -14,7 +14,7 @@ async function buscarNoticias(source) {
     const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
-});
+}); 
         const page = await browser.newPage();
 
         // Simula um navegador real para evitar bloqueios do site
