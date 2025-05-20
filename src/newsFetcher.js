@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 console.log("🔍 HTML carregado:", await page.content());
 const sources = [
-    { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "article.noticia a" }
+    { url: "https://www.gazetaesportiva.com/tag/sao-paulo", selector: "article.noticia a[href]" }
 ];
 
 // Função para capturar notícias corretamente via Puppeteer
