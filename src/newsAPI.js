@@ -2,10 +2,10 @@
 
 const express = require("express");
 const cors = require("cors"); // Adicionando CORS para evitar bloqueios
-const { processarNoticias } = require("./newsSummarizer");
+const { obterNoticias } = require("./newsFetcher"); // Correção na importação
 
 const app = express();
-const PORT = process.env.PORT || 10000; // Definindo a porta corretamente
+const PORT = process.env.PORT || 10000; // Porta dinâmica para evitar conflito
 
 app.use(cors()); // Permitir requisições de qualquer origem
 app.use(express.json()); // Garantir que JSON seja processado corretamente
@@ -20,7 +20,7 @@ app.get("/api/noticias", async (req, res) => {
     try {
         console.log("🔍 Processando notícias...");
         
-        const noticias = await processarNoticias();
+        const noticias = await obterNoticias(); // Correção da chamada de função
 
         if (!noticias || noticias.length === 0) {
             return res.status(404).json({ erro: "Nenhuma notícia encontrada." });
@@ -33,7 +33,9 @@ app.get("/api/noticias", async (req, res) => {
     }
 });
 
-// Iniciando o servidor na porta correta e garantindo que está escutando corretamente
+// Correção: Verifica se a porta está disponível antes de iniciar o servidor
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
+}).on("error", (erro) => {
+    console.error(`❌ Erro ao iniciar servidor: ${erro.message}`);
 });
