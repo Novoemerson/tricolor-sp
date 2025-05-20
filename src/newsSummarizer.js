@@ -11,7 +11,7 @@ async function gerarResumo(texto) {
             prompt: `Resuma a seguinte notícia de forma clara e objetiva:\n\n"${texto}"`,
             max_tokens: 150
         }, {
-            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }` }
+            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }
         });
 
         return resposta.data.choices[0].text.trim();
@@ -42,25 +42,5 @@ async function processarNoticias() {
     return noticiasResumidas;
 }
 
-// Teste manual da IA - Esta função foi declarada ANTES de ser chamada
-async function testarIA() {
-    try {
-        const resposta = await axios.post("https://api.openai.com/v1/completions", {
-            model: "gpt-4",
-            prompt: "Resuma esta notícia: 'São Paulo vence clássico e sobe na tabela!'",
-            max_tokens: 50
-        }, {
-            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }
-        });
-
-        console.log("✅ Resumo gerado:", resposta.data.choices[0].text.trim());
-    } catch (erro) {
-        console.error("❌ Erro ao testar IA:", erro);
-    }
-}
-
-// Chamada de teste da função
-testarIA();
-
-// Exportando funções para uso na API
+// Exportando função para ser usada na API
 module.exports = { processarNoticias };
