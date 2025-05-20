@@ -14,21 +14,16 @@ app.get("/", (req, res) => {
 // Endpoint de notícias com timeout
 app.get("/api/noticias", async (req, res) => {
     try {
-        console.log("🔍 Testando processamento de notícias...");
+        const noticias = await processarNoticias();
 
-        // Definir um timeout máximo de 10 segundos para processar notícias
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error("Tempo limite excedido")), 10000)
-        );
+        if (!noticias.length) {
+            return res.json({ erro: "Nenhuma notícia encontrada." });
+        }
 
-        // Executar a função de busca de notícias com timeout
-        const noticias = await Promise.race([processarNoticias(), timeoutPromise]);
-
-        console.log("✅ Notícias processadas:", noticias);
         res.json(noticias);
     } catch (erro) {
         console.error("❌ Erro ao processar notícias:", erro);
-        res.status(500).json({ erro: "Não foi possível carregar as notícias a tempo." });
+        res.status(500).json({ erro: "Erro ao carregar as notícias." });
     }
 });
 
