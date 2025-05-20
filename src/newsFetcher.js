@@ -12,14 +12,14 @@ async function buscarNoticias(source) {
         console.log(`🔍 Acessando: ${url} via Puppeteer`);
 
         const browser = await puppeteer.launch({
-            headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
-        });
-        const page = await browser.newPage();
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+});
+const page = await browser.newPage();
 
-        // Simula um navegador real para evitar bloqueios do site
-        await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+// Simular um navegador real
+await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+await page.goto(url, { waitUntil: "domcontentloaded" });
 
         // Captura os títulos e links das notícias corretamente
        const html = await page.content();
