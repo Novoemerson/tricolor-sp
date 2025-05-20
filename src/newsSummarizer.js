@@ -6,7 +6,7 @@ const { obterNoticias } = require('./newsFetcher');
 // Função para gerar resumo usando IA do Hugging Face
 async function gerarResumo(texto) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000); // Limite de 8 segundos
+    const timeout = setTimeout(() => controller.abort(), 15000); // Agora com 15 segundos de limite
 
     try {
         const resposta = await axios.post(
