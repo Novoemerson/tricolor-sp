@@ -18,6 +18,10 @@ app.get("/api/noticias", async (req, res) => {
 });
 
 // Iniciando o servidor
+// Rota principal - Página inicial
+app.get("/", (req, res) => {
+    res.send("<h1>🚀 Tricolor-SP está rodando! 🔥</h1><p>Acesse <a href='/api/noticias'>/api/noticias</a> para ver as últimas notícias.</p>");
+});
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
