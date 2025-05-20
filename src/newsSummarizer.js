@@ -50,7 +50,7 @@ async function testarIA() {
             prompt: "Resuma esta notícia: 'São Paulo vence clássico e sobe na tabela!'",
             max_tokens: 50
         }, {
-            headers: { Authorization: `Bearer SEU_TOKEN_API` }
+            headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}` }
         });
 
         console.log("✅ Resumo gerado:", resposta.data.choices[0].text.trim());
