@@ -14,15 +14,18 @@ const sources = [
 async function buscarNoticias(url) {
     try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000); // Timeout de 5 segundos
+        const timeout = setTimeout(() => controller.abort(), 5000);
 
         const resposta = await axios.get(url, { signal: controller.signal });
+
+        clearTimeout(timeout);
         
-        clearTimeout(timeout); // Cancela timeout se a resposta for rápida
+        const $ = cheerio.load(resposta.data);
+        console.log("🔍 HTML carregado de:", url); // Adicionando log de depuração
         return resposta.data;
     } catch (erro) {
         console.error(`❌ Erro ao acessar ${url}:`, erro.message);
-        return null; // Evita travamento
+        return null;
     }
 }
 
