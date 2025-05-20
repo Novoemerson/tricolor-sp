@@ -1,0 +1,23 @@
+// newsAPI.js - API que retorna notícias resumidas sobre o São Paulo FC
+
+const express = require("express");
+const { processarNoticias } = require("./newsSummarizer");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Endpoint para obter as notícias resumidas
+app.get("/api/noticias", async (req, res) => {
+    try {
+        const noticias = await processarNoticias();
+        res.json(noticias);
+    } catch (erro) {
+        console.error("Erro ao processar notícias:", erro);
+        res.status(500).json({ erro: "Não foi possível carregar as notícias." });
+    }
+});
+
+// Iniciando o servidor
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
