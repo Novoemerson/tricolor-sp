@@ -6,9 +6,8 @@ const cheerio = require('cheerio');
 // URLs das fontes de notícias (ajuste conforme necessário)
 const sources = [
     "https://www.lance.com.br/sao-paulo",
-    "https://www.gazetaesportiva.com/sao-paulo-fc/",
-    "https://www.uol.com.br/esporte/sao-paulo/",
-    "https://www.globo.com.br/esporte/sao-paulo-fc/"
+    "https://www.gazetaesportiva.com/tag/sao-paulo",
+    "https://www.uol.com.br/esporte/futebol/times/sao-paulo/",
 ];
 
 // Função para buscar e processar notícias
