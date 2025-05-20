@@ -44,3 +44,20 @@ async function processarNoticias() {
 
 // Exportando função para ser usada na API
 module.exports = { processarNoticias };
+
+async function testarIA() {
+    try {
+        const resposta = await axios.post("https://api.openai.com/v1/completions", {
+            model: "gpt-4",
+            prompt: "Resuma esta notícia: 'São Paulo vence clássico e sobe na tabela!'",
+            max_tokens: 50
+        }, {
+            headers: { Authorization: `Bearer SEU_TOKEN_API` }
+        });
+
+        console.log("✅ Resumo gerado:", resposta.data.choices[0].text.trim());
+    } catch (erro) {
+        console.error("❌ Erro ao testar IA:", erro);
+    }
+}
+testarIA();
