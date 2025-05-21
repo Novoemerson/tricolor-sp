@@ -4,14 +4,10 @@
   "description": "API de notícias do São Paulo FC",
   "main": "newsAPI.js",
   "dependencies": {
-    "express": "^4.17.1",
-    "axios": "^1.5.0",
-    "cheerio": "^1.0.0",
-    "cors": "^2.8.5",
-    "puppeteer": "^21.5.3"
-  },
-  "scripts": {
-  "start": "node src/newsAPI.js",
-  "clean-install": "rm -rf node_modules && rm -rf /opt/render/.cache && npm cache clean --force && npm install"
+  "express": "^4.21.2",
+  "axios": "^1.9.0",
+  "cheerio": "^1.0.0",
+  "cors": "^2.8.5",
+  "puppeteer": "^21.11.0"
 }
 }
