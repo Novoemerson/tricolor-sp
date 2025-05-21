@@ -12,6 +12,6 @@
   },
   "scripts": {
   "start": "node src/newsAPI.js",
-  "postinstall": "rm -rf /opt/render/.cache/puppeteer && npx puppeteer browsers install chrome"
+  "clean-install": "rm -rf node_modules && rm -rf /opt/render/.cache && npm cache clean --force && npm install"
 }
 }
